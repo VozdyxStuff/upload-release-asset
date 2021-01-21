@@ -46,6 +46,27 @@ describe('Upload Release Asset', () => {
       .mockReturnValueOnce('upload_url')
       .mockReturnValueOnce('asset_path')
       .mockReturnValueOnce('asset_name')
+      .mockReturnValueOnce('Asset Label')
+      .mockReturnValueOnce('asset_content_type');
+
+    await run();
+
+    expect(uploadReleaseAsset).toHaveBeenCalledWith({
+      url: 'upload_url',
+      headers: { 'content-type': 'asset_content_type', 'content-length': 527 },
+      name: 'asset_name',
+      label: 'Asset Label',
+      file: content
+    });
+  });
+
+  test('Upload release asset endpoint is called without label', async () => {
+    core.getInput = jest
+      .fn()
+      .mockReturnValueOnce('upload_url')
+      .mockReturnValueOnce('asset_path')
+      .mockReturnValueOnce('asset_name')
+      .mockReturnValueOnce('')
       .mockReturnValueOnce('asset_content_type');
 
     await run();
