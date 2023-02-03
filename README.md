@@ -53,7 +53,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build project # This would actually build your project, using zip for an example artifact
+      - name: Build project
+        # This would actually build your project, using zip for an example artifact
         run: |
           zip --junk-paths my-artifact README.md
       - name: Create Release
@@ -72,7 +73,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          # This references the previous `create_release` step by ID to get its
+          # outputs object, which include an `upload_url`.
+          # See this blog post for more info:
+          # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
           asset_path: ./my-artifact.zip
           asset_name: my-artifact.zip
           asset_label: My Artifact (zip)
